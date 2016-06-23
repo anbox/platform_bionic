@@ -816,6 +816,7 @@ send_vc(res_state statp,
 				return (-1);
 			}
 		}
+#if 0
 		if (statp->_mark != MARK_UNSET) {
 			if (setsockopt(statp->_vcsock, SOL_SOCKET,
 				    SO_MARK, &statp->_mark, sizeof(statp->_mark)) < 0) {
@@ -824,6 +825,7 @@ send_vc(res_state statp,
 				return -1;
 			}
 		}
+#endif
 		errno = 0;
 		if (random_bind(statp->_vcsock,nsap->sa_family) < 0) {
 			*terrno = errno;
@@ -1118,6 +1120,7 @@ send_dg(res_state statp,
 			}
 		}
 
+#if 0
 		if (statp->_mark != MARK_UNSET) {
 			if (setsockopt(EXT(statp).nssocks[ns], SOL_SOCKET,
 					SO_MARK, &(statp->_mark), sizeof(statp->_mark)) < 0) {
@@ -1125,6 +1128,7 @@ send_dg(res_state statp,
 				return -1;
 			}
 		}
+#endif
 #ifndef CANNOT_CONNECT_DGRAM
 		/*
 		 * On a 4.3BSD+ machine (client and server,
