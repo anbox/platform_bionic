@@ -30,12 +30,21 @@
 
 #include "private/ErrnoRestorer.h"
 
+static int map_fallocate_result(int ret) {
+  // ANBOX: Ignore unsupported fallocate as we get it on ZFS for example
+  if (ret == ENOTSUP)
+    return 0;
+  return ret;
+}
+
 int posix_fallocate(int fd, off_t offset, off_t length) {
   ErrnoRestorer errno_restorer;
-  return (fallocate(fd, 0, offset, length) == 0) ? 0 : errno;
+  const int ret = (fallocate(fd, 0, offset, length) == 0) ? 0 : errno;
+  return map_fallocate_result(ret);
 }
 
 int posix_fallocate64(int fd, off64_t offset, off64_t length) {
   ErrnoRestorer errno_restorer;
-  return (fallocate64(fd, 0, offset, length) == 0) ? 0 : errno;
+  const int ret = (fallocate64(fd, 0, offset, length) == 0) ? 0 : errno;
+  return map_fallocate_result(ret);
 }
